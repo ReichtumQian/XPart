@@ -1,0 +1,6 @@
+/XPart/XPart.cache
+/XPart/XPart.hw
+/XPart/XPart.ip_user_files
+/XPart/XPart.sim/sim_1/behav/xsim
+*.o
+*.log
