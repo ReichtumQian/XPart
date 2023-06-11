@@ -120,6 +120,7 @@ module SCPU(
     // WB definitions
     wire[31:0] wb_inst;
     wire[63:0] wb_pc;
+    wire[2:0] wb_funct3 = wb_inst[14:12];
     wire[4:0] wb_rd = wb_inst[11:7];
     wire[63:0] wb_alu_result;
 
@@ -756,15 +757,25 @@ module SCPU(
       .memory_data_out(wb_memory_data)
     );
     
-    // 00： ALU
-    // 01： imm
-    // 10： pc + 4
-    // 11： memory
+    // 000： ALU
+    // 001： imm
+    // 010： pc + 4
+    // 011： memory
+    // 100： csr
+    // 101： pc + imm 
+    wire[63:0] wb_memory_write_data; // 真正要写回寄存器的数据
+    wire wb_is_ld = wb_funct3 == 011;
+    wire wb_is_lw = wb_funct3 == 010;
+    wire wb_is_lbu = wb_funct3 == 100;
+    assign wb_memory_write_data = (wb_is_ld) ? wb_memory_data : 
+                                   (wb_is_lw) ? {{32{wb_memory_data[31]}},{wb_memory_data[31:0]}} :
+                                   (wb_is_lbu) ? {56'b0,wb_memory_data[7:0]} :
+                                   64'b0;
     MUX8T1_32 write_register_mux(
       .I0(wb_alu_result),
       .I1(wb_imm),
       .I2(wb_pc+4),
-      .I3(wb_memory_data),
+      .I3(wb_memory_write_data),
       .I4(wb_csr_data_out),
       .I5(wb_pc + wb_imm),
       .s(wb_mem_to_reg),

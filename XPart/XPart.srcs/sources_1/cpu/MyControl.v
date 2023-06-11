@@ -78,14 +78,14 @@ module MyControl(
           if(funct3 == 3'b010) begin alu_op = SLT;  end
       end
       //===============================================
-      // lw
+      // lbu, lw, ld
       7'b0000011:begin
         reg_write = 1'b1;
         mem_to_reg = 3'b011;
         alu_op = 0;
       end
       //===============================================
-      // sw
+      // sw, sb, sd
       7'b0100011:begin
         mem_write = 1'b1;
         alu_op = 0;

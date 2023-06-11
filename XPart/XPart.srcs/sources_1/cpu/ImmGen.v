@@ -11,7 +11,7 @@ module ImmGen(
     case(op_code)
       // addi, 
       7'b0010011: imm_out[63:0] <= {{ 52{inst[31]}}, inst[31:20] };
-      // lw
+      // lw, ld, lbu
       7'b0000011: imm_out[63:0] <= {{ 52{inst[31]}}, inst[31:20] };
       // sw
       7'b0100011: imm_out[63:0] <= { {52{inst[31]}}, inst[31:25], inst[11:7] };
