@@ -4,21 +4,21 @@ module Core(
     input  wire        clk,
     input  wire        aresetn,  // reset 是否按下
     input  wire        step,  // 是否为 step 模式
-    input  wire        debug_mode,  // 是否是debug模式
+    input  wire        debug_mode  // 是否是debug模式
 
     // 测试部分1
-    input  wire [31:0] data_in,   //仅用于测试，这里用于指定内存地址
-    output wire [31:0] address,   // 仅用于测试
-    output wire [31:0] data_out,  // 仅用于测试，这里用于测试内存地址内容
+    // input  wire [63:0] data_in,   //仅用于测试，这里用于指定内存地址
+    // output wire [63:0] address,   // 仅用于测试
+    // output wire [63:0] data_out,  // 仅用于测试，这里用于测试内存地址内容
 
     // 测试部分2
-    input  wire [4:0]  debug_reg_addr, // register address
+    // input  wire [4:0]  debug_reg_addr, // register address
     
-    input  wire [31:0] chip_debug_in,
-    output wire [31:0] chip_debug_out0,   // pc 的值
-    output wire [31:0] chip_debug_out1,   // 读写的地址
-    output wire [31:0] chip_debug_out2,   //寄存器内容
-    output wire [31:0] chip_debug_out3    // gp 的值
+    // input  wire [63:0] chip_debug_in,
+    // output wire [63:0] chip_debug_out0,   // pc 的值
+    // output wire [63:0] chip_debug_out1,   // 读写的地址
+    // output wire [63:0] chip_debug_out2,   //寄存器内容
+    // output wire [63:0] chip_debug_out3    // gp 的值
 );
 
 
@@ -30,11 +30,12 @@ module Core(
     // inst：读取出的指令
     // core_data_in ：从数据内存读取的数据
     // addr_out ： 要写的数据内存地址
-    wire [31:0] inst, core_data_in, addr_out, core_data_out, pc_out;
-    reg  [31:0] clk_div;  // 时钟记录器，记录经过了多少个时钟周期
+    wire [31:0] inst;
+    wire [63:0] core_data_in, addr_out, core_data_out, pc_out;
+    reg  [63:0] clk_div;  // 时钟记录器，记录经过了多少个时钟周期
     
     assign rst = ~aresetn;
-    wire [31:0] debug_reg_out;
+    // wire [63:0] debug_reg_out;
     SCPU cpu(
         .clk(cpu_clk),
         .rst(rst),
@@ -42,8 +43,8 @@ module Core(
         .data_in(core_data_in),      //从数据内存读取的数据，load指令需要用
 
         //测试部分
-        .debug_reg_addr(debug_reg_addr),
-        .debug_reg_out(debug_reg_out),
+        // .debug_reg_addr(debug_reg_addr),
+        // .debug_reg_out(debug_reg_out),
         
         // 以下为输出
         .addr_out(addr_out),         // 要写的数据内存地址
@@ -92,11 +93,11 @@ module Core(
     
     
 
-    assign chip_debug_out0 = pc_out;  // pc 的值
-    assign chip_debug_out1 = addr_out;   // 读或写的地址
+    // assign chip_debug_out0 = pc_out;  // pc 的值
+    // assign chip_debug_out1 = addr_out;   // 读或写的地址
     // assign chip_debug_out2 = inst;
-    assign chip_debug_out2 = debug_reg_out;  // 寄存器内容
-    assign chip_debug_out3 = inst; //指令的值
+    // assign chip_debug_out2 = debug_reg_out;  // 寄存器内容
+    // assign chip_debug_out3 = inst; //指令的值
 
 
 endmodule

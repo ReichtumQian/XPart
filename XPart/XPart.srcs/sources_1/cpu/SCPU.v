@@ -5,26 +5,26 @@ module SCPU(
     input         clk,
     input         rst,
     input  [31:0] inst,  //32位指令
-    input  [31:0] data_in,  // 内存读入数据
+    input  [63:0] data_in,  // 内存读入数据
 
     //测试数据
-    input wire[4:0] debug_reg_addr,
-    output wire[31:0] debug_reg_out,
+    // input wire[4:0] debug_reg_addr,
+    // output wire[63:0] debug_reg_out,
 
-    output [31:0] addr_out, //  要写/读的数据内存地址  
-    output [31:0] data_out, // 要写的数据
-    output [31:0] pc_out,   // 更改后的 pc 值
+    output [63:0] addr_out, //  要写/读的数据内存地址  
+    output [63:0] data_out, // 要写的数据
+    output [63:0] pc_out,   // 更改后的 pc 值
     output        mem_write // 0 读内存，1 写内存
   );
 
     //====================================================
     // definitions
     // pc
-    reg[31:0] pc;
+    reg[63:0] pc;
     assign pc_out = pc;  
     // =================================================
     // IF definition
-    wire[31:0] if_pc;
+    wire[63:0] if_pc;
     wire[31:0] if_inst;
     assign if_pc = pc;
     assign if_inst = inst;
@@ -32,12 +32,12 @@ module SCPU(
     // ID definition
     wire[4:0] id_rs1;
     wire[4:0] id_rs2;
-    wire[31:0] id_pc;
+    wire[63:0] id_pc;
     wire[31:0] id_inst;
     // register
    // wire[31:0] write_data_to_reg; // 要写入寄存器的数据
-    wire[31:0] id_data1;  // 从寄存器中读出的数据
-    wire[31:0] id_data2;
+    wire[63:0] id_data1;  // 从寄存器中读出的数据
+    wire[63:0] id_data2;
     // 控制信号
     wire [3:0] id_alu_op;
     wire [1:0] id_pc_src ;
@@ -47,19 +47,19 @@ module SCPU(
     wire[1:0] id_alu_src;
     // csr 控制信号
     wire id_csr_write, id_ecall;
-    wire[31:0] id_csr_data_out;
+    wire[63:0] id_csr_data_out;
     wire[11:0] id_csr_addr;
     assign id_csr_addr = id_inst[31:20];
     
     //连接 ImmGen
-    wire[31:0] id_imm;
+    wire[63:0] id_imm;
     // =================================================
     // EX definitions
-    wire[31:0] ex_data1;
-    wire[31:0] ex_data2;
+    wire[63:0] ex_data1;
+    wire[63:0] ex_data2;
     wire[31:0] ex_inst;
-    wire[31:0] ex_pc;
-    wire[31:0] ex_imm;
+    wire[63:0] ex_pc;
+    wire[63:0] ex_imm;
     wire[4:0] ex_rd = ex_inst[11:7];
     wire[4:0] ex_rs1 = ex_inst[19:15];
     wire[4:0] ex_rs2 = ex_inst[24:20];
@@ -79,20 +79,20 @@ module SCPU(
 
     // ALU zero
     wire ex_zero;
-    wire[31:0] alu_data2;
-    wire[31:0] ex_alu_result;
+    wire[63:0] alu_data2;
+    wire[63:0] ex_alu_result;
     wire zero;
     
     // CSR 
     wire ex_csr_write, ex_ecall;
-    wire[31:0] ex_csr_data_out;
+    wire[63:0] ex_csr_data_out;
     wire[11:0] ex_csr_addr;
     assign ex_csr_addr = ex_inst[31:20];
     // =================================================
     // MEM definition
     wire[31:0] mem_inst;
-    wire[31:0] mem_pc;
-    wire[31:0] mem_imm;
+    wire[63:0] mem_pc;
+    wire[63:0] mem_imm;
 
     // control signals
     wire[1:0] mem_pc_src;
@@ -105,23 +105,23 @@ module SCPU(
     wire mem_mem_write;
 
     // ALU
-    wire[31:0] mem_alu_result;
+    wire[63:0] mem_alu_result;
     wire mem_zero;
 
-    wire[31:0] mem_data2;
-    wire[31:0] mem_memory_data;
+    wire[63:0] mem_data2;
+    wire[63:0] mem_memory_data;
     
     // csr
     wire mem_csr_write, mem_ecall;
-    wire[31:0] mem_csr_data_out;
+    wire[63:0] mem_csr_data_out;
     wire[11:0] mem_csr_addr;
     assign mem_csr_addr = mem_inst[31:20];
     // =================================================
     // WB definitions
     wire[31:0] wb_inst;
-    wire[31:0] wb_pc;
+    wire[63:0] wb_pc;
     wire[4:0] wb_rd = wb_inst[11:7];
-    wire[31:0] wb_alu_result;
+    wire[63:0] wb_alu_result;
 
     // control signals
     wire[1:0] wb_pc_src;
@@ -132,19 +132,19 @@ module SCPU(
     wire[2:0] wb_mem_to_reg;
     wire wb_mem_write;
     // imm
-    wire[31:0] wb_imm;
+    wire[63:0] wb_imm;
     // memory
-    wire[31:0] wb_memory_data;
+    wire[63:0] wb_memory_data;
     // csr 控制信号
     wire wb_csr_write, wb_ecall;
     wire[11:0] wb_csr_addr;
     assign wb_csr_addr = wb_inst[31:20];
-    wire[31:0] wb_csr_data_out;
+    wire[63:0] wb_csr_data_out;
     
     
     wire wb_reg_write;
     wire save_forward;
-    wire[31:0] wb_write_data_to_reg;
+    wire[63:0] wb_write_data_to_reg;
     
     // =================================================
     // stall 控制信号
@@ -167,7 +167,7 @@ module SCPU(
     
     // 为 MEM 前递做准备
     // 选择写回寄存器的内容
-    wire[31:0] mem_write_data_to_reg;
+    wire[63:0] mem_write_data_to_reg;
     MUX8T1_32 mem_write_register_mux(
       .I0(mem_alu_result),
       .I1(mem_imm),
@@ -394,7 +394,7 @@ module SCPU(
     
     // 连接 ALU 前的 MUX
     // 0 来自寄存器， 1 来自立即数, 2 来自 CSR
-    wire[31:0] imm_reg_mux;
+    wire[63:0] imm_reg_mux;
     MUX4T1_32 alu_src_mux(
       .I0(ex_data2),
       .I1(ex_imm),
@@ -405,7 +405,7 @@ module SCPU(
     );
     
     // 判断 rs1 是否来自前面指令的 ALU 结果
-     wire[31:0] alu_data1;
+     wire[63:0] alu_data1;
      MUX4T1_32 alu_data1_mux(
        .I0(ex_data1),
        // 01 表示来自 wb， 10 表示来自 mem（老师课件上的设计。。）

@@ -33,20 +33,20 @@ module Top(
         .aresetn(aresetn),  // 从 IO-Manager 输入
         .step(step),    // 从 IO-Manager 输入
 //        .debug_mode(switch[15]),  // 从 Top 输入
-        .debug_mode(switch[0]),
-        .debug_reg_addr(switch[11:7]),
+        // .debug_mode(switch[0]),
+        // .debug_reg_addr(switch[11:7]),
 //        .data_in(data_in),  // 用于测试：输入内存地址
 
         //以下为输出
-        .address(address),  // 要写的地址
+        // .address(address),  // 要写的地址
 //        .data_out(data_out), // 用于测试：这里用于作为内存地址值的输出
 
         // 以下为 debug 使用
-//        .chip_debug_in(chip_debug_in),
-        .chip_debug_out0(chip_debug_out0),
-        .chip_debug_out1(chip_debug_out1),
-        .chip_debug_out2(chip_debug_out2),   //寄存器内容
-        .chip_debug_out3(chip_debug_out3)    //gp（x3）内容
+      //  .chip_debug_in(chip_debug_in),
+        // .chip_debug_out0(chip_debug_out0),
+        // .chip_debug_out1(chip_debug_out1),
+        // .chip_debug_out2(chip_debug_out2),   //寄存器内容
+        // .chip_debug_out3(chip_debug_out3)    //gp（x3）内容
     );
 
     IO_Manager io_manager_inst(

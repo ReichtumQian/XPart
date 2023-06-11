@@ -7,20 +7,20 @@ module Regs(
   input[4:0] read_addr_1,  // 读取的寄存器标号
   input[4:0] read_addr_2,
   input[4:0] write_addr,   // 写入的寄存器标号
-  input[31:0] write_data,
+  input[63:0] write_data,
 
 
   //测试数据
-  input wire[4:0] debug_reg_addr,
-  output wire[31:0] debug_reg_out,
+  // input wire[4:0] debug_reg_addr,
+  // output wire[63:0] debug_reg_out,
   
-  output[31:0] read_data_1,
-  output[31:0] read_data_2
+  output[63:0] read_data_1,
+  output[63:0] read_data_2
     );
 
 
   integer i;
-  reg[31:0] register[1:31]; // 31个寄存器，其中x0为0
+  reg[63:0] register[1:31]; // 31个寄存器，其中x0为0
 
   assign read_data_1 = (read_addr_1 == 0) ? 0 : register[read_addr_1];
   assign read_data_2 = (read_addr_2 == 0) ? 0 : register[read_addr_2];
