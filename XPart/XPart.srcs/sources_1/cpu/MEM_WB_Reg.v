@@ -7,10 +7,10 @@ module MEM_WB_Reg(
   input rst,
 
   // input: alu_result
-  input[31:0] alu_result_in,
+  input[63:0] alu_result_in,
 
   // input: inst & pc
-  input[31:0] pc_in,
+  input[63:0] pc_in,
   input[31:0] inst_in,
 
   // input: control signals
@@ -26,22 +26,22 @@ module MEM_WB_Reg(
   // input: csr
   input csr_write_in,
   input csr_ecall_in,
-  input[31:0] csr_data_out_in, 
+  input[63:0] csr_data_out_in, 
 
   // input: imm
-  input[31:0] imm_in,
+  input[63:0] imm_in,
 
   // input: memory data
-  input[31:0] memory_data_in,
+  input[63:0] memory_data_in,
   
   input stall,
 
   // output alu result
-  output[31:0] alu_result_out,
+  output[63:0] alu_result_out,
 
   // output: inst & pc
   output[31:0] inst_out,
-  output[31:0] pc_out,
+  output[63:0] pc_out,
   
   // output: control signals
   output[1:0] pc_src_out,
@@ -54,22 +54,22 @@ module MEM_WB_Reg(
   output[2:0] mem_to_reg_out,
 
   // output: imm
-  output[31:0] imm_out,
+  output[63:0] imm_out,
 
   // output: memory data
-  output[31:0] memory_data_out,
+  output[63:0] memory_data_out,
 
   output csr_write_out,
   output csr_ecall_out,
-  output[31:0] csr_data_out_out
+  output[63:0] csr_data_out_out
 );
 
 
-reg[31:0] alu_result;
-reg[31:0] pc;
+reg[63:0] alu_result;
+reg[63:0] pc;
 reg[31:0] inst;
-reg[31:0] imm;
-reg[31:0] memory_data;
+reg[63:0] imm;
+reg[63:0] memory_data;
 
 assign alu_result_out = alu_result;
 assign pc_out = pc;

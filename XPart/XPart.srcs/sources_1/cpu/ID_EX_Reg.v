@@ -7,11 +7,11 @@ module ID_EX_Reg(
 
 
   // input: data
-  input[31:0] data1_in,
-  input[31:0] data2_in,
+  input[63:0] data1_in,
+  input[63:0] data2_in,
 
   // input: inst & pc
-  input[31:0] pc_in,
+  input[63:0] pc_in,
   input[31:0] inst_in,
   input predict_in, // predict whether to take branch
 
@@ -26,12 +26,12 @@ module ID_EX_Reg(
   input mem_write_in,
 
   // input: imm
-  input[31:0] imm_in,
+  input[63:0] imm_in,
   
   // input: csr
   input csr_write_in,
   input csr_ecall_in,
-  input[31:0] csr_data_out_in, 
+  input[63:0] csr_data_out_in, 
   
   input stall,
   input is_load,
@@ -40,12 +40,12 @@ module ID_EX_Reg(
   
 
   // output: data
-  output[31:0] data1_out,
-  output[31:0] data2_out,
+  output[63:0] data1_out,
+  output[63:0] data2_out,
 
   // output: inst & pc
   output[31:0] inst_out,
-  output[31:0] pc_out,
+  output[63:0] pc_out,
   output predict_out,
 
   // output: control signals
@@ -60,17 +60,17 @@ module ID_EX_Reg(
   
   output csr_write_out,
   output csr_ecall_out,
-  output[31:0] csr_data_out_out, // ¶ÁÈ¡µÄ csr ¼Ä´æÆ÷
+  output[63:0] csr_data_out_out, // ¶ÁÈ¡µÄ csr ¼Ä´æÆ÷
 
   // output: imm
-  output[31:0] imm_out
+  output[63:0] imm_out
 );
 
-reg[31:0] data1;
-reg[31:0] data2;
-reg[31:0] pc;
-reg[31:0] inst;
-reg[31:0] imm;
+reg[63:0] data1;
+reg[63:0] data2;
+reg[63:0] pc;
+reg[63:0] inst;
+reg[63:0] imm;
 reg predict;
 
 assign data1_out = data1;

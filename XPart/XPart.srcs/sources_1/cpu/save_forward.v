@@ -5,13 +5,13 @@ module save_forward(
   input clk,
   input[6:0] mem_op_code,
   input[4:0] mem_rs2,
-  input[31:0] mem_data2,
+  input[63:0] mem_data2,
   
   input wb_reg_write,
   input[4:0] wb_rd,
-  input[31:0] wb_alu_result,
+  input[63:0] wb_alu_result,
 //  output reg save_forward
-  output reg[31:0] data_out
+  output reg[63:0] data_out
 );
 
 //reg now_reg_write;
@@ -21,11 +21,11 @@ module save_forward(
 
 reg before_reg_write1;
 reg[4:0] before_rd1;
-reg[31:0] before_alu_result1;
+reg[63:0] before_alu_result1;
 
 reg before_reg_write2;
 reg[4:0] before_rd2;
-reg[31:0] before_alu_result2;
+reg[63:0] before_alu_result2;
 
 
 always@(*) begin

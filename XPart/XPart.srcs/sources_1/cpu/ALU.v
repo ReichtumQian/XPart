@@ -2,10 +2,10 @@
 
 
 module ALU(
-  input[31:0] a,
-  input[31:0] b,
+  input[63:0] a,
+  input[63:0] b,
   input[3:0] alu_op,
-  output reg[31:0] res,
+  output reg[63:0] res,
   output reg zero
     );
 

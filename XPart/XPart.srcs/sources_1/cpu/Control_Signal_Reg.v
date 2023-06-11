@@ -15,7 +15,7 @@ module Control_Signal_Reg(
   input[2:0] mem_to_reg_in,
   input csr_write_in,
   input csr_ecall_in,
-  input[31:0] csr_data_out_in, // ¶ÁÈ¡µÄ csr ¼Ä´æÆ÷
+  input[63:0] csr_data_out_in, // ¶ÁÈ¡µÄ csr ¼Ä´æÆ÷
   
   input stall,
   input is_load,
@@ -30,7 +30,7 @@ module Control_Signal_Reg(
   output[2:0] mem_to_reg_out,
   output csr_write_out,
   output csr_ecall_out,
-  output[31:0] csr_data_out_out // ¶ÁÈ¡µÄ csr ¼Ä´æÆ÷
+  output[63:0] csr_data_out_out // ¶ÁÈ¡µÄ csr ¼Ä´æÆ÷
 );
 
 reg[1:0] pc_src;   
@@ -43,7 +43,7 @@ reg[3:0] alu_op;
 reg[2:0] mem_to_reg;
 reg csr_write;
 reg csr_ecall;
-reg[31:0] csr_data_out;
+reg[63:0] csr_data_out;
 
 assign pc_src_out = pc_src;
 assign reg_write_out = reg_write;

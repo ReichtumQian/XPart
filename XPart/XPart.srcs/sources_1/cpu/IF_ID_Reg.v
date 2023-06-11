@@ -6,13 +6,13 @@ module IF_ID_Reg(
   input rst,
 
   // input: inst & pc
-  input[31:0] pc_in,
+  input[63:0] pc_in,
   input[31:0] inst_in,
   input predict_in, // predict whether to take branch
 
   // output: inst & pc
   output[31:0] inst_out,
-  output[31:0] pc_out,
+  output[63:0] pc_out,
   output predict_out,
   
   // output: target register
@@ -20,7 +20,7 @@ module IF_ID_Reg(
   output[4:0] rt_out
 );
 
-reg[31:0] pc;
+reg[63:0] pc;
 reg[31:0] inst;
 reg predict;
 

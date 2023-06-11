@@ -209,14 +209,14 @@ module SCPU(
     wire id_predict;
     wire ex_predict;
     wire mem_predict;
-    wire[31:0] bht_write_pc; // 写入 bht 的 pc
+    wire[63:0] bht_write_pc; // 写入 bht 的 pc
     reg bht_write;   // 是否写 bht 表
     reg bht_write_predict;  // 1 for taken, 0 for not taken
 
     // btb
     wire btb_read_found;
-    wire[31:0] btb_read_predict_pc;
-    reg[31:0] btb_write_predict_pc;
+    wire[63:0] btb_read_predict_pc;
+    reg[63:0] btb_write_predict_pc;
     reg btb_write;
 
     
@@ -275,8 +275,8 @@ module SCPU(
       .write_data(wb_write_data_to_reg),
 
       //测试部分
-      .debug_reg_addr(debug_reg_addr),
-      .debug_reg_out(debug_reg_out),
+//      .debug_reg_addr(debug_reg_addr),
+//      .debug_reg_out(debug_reg_out),
 
       .read_data_1(id_data1),
       .read_data_2(id_data2)

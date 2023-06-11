@@ -2,12 +2,12 @@
 
 
 module MUX4T1_32(
-    input[31:0] I0,
-    input[31:0] I1,
-    input[31:0] I2,
-    input[31:0] I3,
+    input[63:0] I0,
+    input[63:0] I1,
+    input[63:0] I2,
+    input[63:0] I3,
     input[1:0] s,
-    output reg[31:0] o
+    output reg[63:0] o
     );
 
 

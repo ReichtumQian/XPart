@@ -6,10 +6,10 @@ module EX_MEM_Reg(
   input rst,
 
   // input: alu_result
-  input[31:0] alu_result_in,
+  input[63:0] alu_result_in,
 
   // input: inst & pc
-  input[31:0] pc_in,
+  input[63:0] pc_in,
   input[31:0] inst_in,
   input predict_in, // predict whether to take branch
 
@@ -26,16 +26,16 @@ module EX_MEM_Reg(
   // input: csr
   input csr_write_in,
   input csr_ecall_in,
-  input[31:0] csr_data_out_in, 
+  input[63:0] csr_data_out_in, 
   
   input stall,
 
   // input: ALU zero
   input zero_in,
-  input [31:0] imm_in,
+  input [63:0] imm_in,
 
   // input: data memory
-  input[31:0] data2_in,  // second data from register 
+  input[63:0] data2_in,  // second data from register 
 
   // output: control signals
   output[1:0] pc_src_out,
@@ -49,31 +49,31 @@ module EX_MEM_Reg(
 
   // output: inst & pc
   output[31:0] inst_out,
-  output[31:0] pc_out,
+  output[63:0] pc_out,
   output predict_out,
 
   // output alu result
-  output[31:0] alu_result_out,
+  output[63:0] alu_result_out,
 
   // output: ALU zero
   output zero_out,
-  output [31:0] imm_out,
+  output [63:0] imm_out,
   
   // output: data memory
-  output[31:0] data2_out  ,
+  output[63:0] data2_out  ,
 
   output csr_write_out,
   output csr_ecall_out,
-  output[31:0] csr_data_out_out
+  output[63:0] csr_data_out_out
 );
 
 
-reg[31:0] alu_result;
-reg[31:0] pc;
-reg[31:0] inst;
+reg[63:0] alu_result;
+reg[63:0] pc;
+reg[63:0] inst;
 reg zero;
-reg[31:0] imm;
-reg[31:0] data2;
+reg[63:0] imm;
+reg[63:0] data2;
 reg predict;
 
 assign alu_result_out = alu_result;

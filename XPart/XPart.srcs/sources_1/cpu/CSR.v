@@ -10,11 +10,11 @@ module CSR(
   input wb_ecall,
   input[11:0] csr_read_addr,  // 读取的目标 CSR 寄存器（因为读写不同步）
   input[11:0] csr_write_addr, // 写入的目标 CSR 寄存器
-  input[31:0] data_in,
-  input[31:0] wb_pc,   // mepc 可能要保存 pc 的值
+  input[63:0] data_in,
+  input[63:0] wb_pc,   // mepc 可能要保存 pc 的值
   input[1:0] pc_src,   // 用于判断是否为 ecall 和 mret
   
-  output reg[31:0] data_out
+  output reg[63:0] data_out
 );
 
 //`define NUM_CSR 16
@@ -25,10 +25,10 @@ module CSR(
 //`define mtvec register[5]    // csr = 0x305
 //`define mepc register[]
 
-reg[31:0] mstatus;
-reg[31:0] mtvec;
-reg[31:0] mepc;
-reg[31:0] mcause;
+reg[63:0] mstatus;
+reg[63:0] mtvec;
+reg[63:0] mepc;
+reg[63:0] mcause;
 
 
 
