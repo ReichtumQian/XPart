@@ -496,9 +496,10 @@ module SCPU(
     save_forward save_forward_judger(
       .mem_op_code(mem_inst[6:0]),
       .mem_rs2(mem_inst[24:20]),
+      .mem_funct3(mem_inst[14:12]),
       .wb_reg_write(wb_reg_write),
       .wb_rd(wb_inst[11:7]),
-//      .save_forward(save_forward)
+    //  .save_forward(save_forward)
       
       // ÐÂÔö
       .clk(clk),
@@ -768,7 +769,7 @@ module SCPU(
     wire wb_is_lw = wb_funct3 == 010;
     wire wb_is_lbu = wb_funct3 == 100;
     assign wb_memory_write_data = (wb_is_ld) ? wb_memory_data : 
-                                   (wb_is_lw) ? {{32{wb_memory_data[31]}},{wb_memory_data[31:0]}} :
+                                   (wb_is_lw) ? {{32{0}},{wb_memory_data[31:0]}} :
                                    (wb_is_lbu) ? {56'b0,wb_memory_data[7:0]} :
                                    64'b0;
     MUX8T1_32 write_register_mux(
