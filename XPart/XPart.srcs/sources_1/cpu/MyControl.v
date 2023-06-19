@@ -95,13 +95,18 @@ module MyControl(
       7'b1100011:begin
         alu_src_b = 2'b0;
         branch = 1'b1;
-         
         pc_src <= 2'b10;
         case(funct3)
-          // beq
-          3'b000: begin b_type = 1; alu_op = SUB; end
           // bne
           3'b001: begin b_type = 0;alu_op = SUB; end
+          // beq
+          3'b000: begin b_type = 1; alu_op = SUB; end
+          // blt
+          3'b100: begin b_type = 2; alu_op = SLT;end
+          // bge
+          3'b101: begin b_type = 3; alu_op = SLT;end
+          // bltu
+          3'b110: begin b_type = 4; alu_op = SLTU;end
           // bgeu
           3'b111: begin b_type = 5; alu_op = SLTU;end
         endcase

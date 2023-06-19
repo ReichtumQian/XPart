@@ -517,7 +517,6 @@ module SCPU(
     always@(posedge clk or posedge rst)begin
       if(rst) begin
         pc <= 0;
-        //stall <= 0;
       end
       else begin
         // =========================================
@@ -569,6 +568,44 @@ module SCPU(
               end
             end
             // end beq
+            // =========================================
+            // begin blt
+            else if(mem_b_type == 2) begin // blt
+              if(mem_alu_result == 1 || mem_zero == 1&& !mem_predict) begin // a <= b
+                pc <= mem_pc + mem_imm;   //immgen 中已右移
+              end else begin
+                if(is_load) pc <= pc;
+                else if(bht_predict && btb_read_found)
+                  pc <= btb_read_predict_pc;
+                else pc <= pc + 4;
+              end
+            end
+            // end blt
+            // =========================================
+            // begin bge
+            else if(mem_b_type == 3) begin // bge
+              if(mem_alu_result == 0 && !mem_predict) begin // a >= b
+                pc <= mem_pc + mem_imm;   //immgen 中已右移
+              end else begin
+                if(is_load) pc <= pc;
+                else if(bht_predict && btb_read_found)
+                  pc <= btb_read_predict_pc;
+                else pc <= pc + 4;
+              end
+            // end bge
+            // =========================================
+            // begin bltu
+            else if(mem_b_type == 4) begin // blt
+              if(mem_alu_result == 1 || mem_zero == 1&& !mem_predict) begin // a <= b
+                pc <= mem_pc + mem_imm;   //immgen 中已右移
+              end else begin
+                if(is_load) pc <= pc;
+                else if(bht_predict && btb_read_found)
+                  pc <= btb_read_predict_pc;
+                else pc <= pc + 4;
+              end
+            end
+            // end bltu
             // =========================================
             // begin bgeu
             else if(mem_b_type == 5) begin
