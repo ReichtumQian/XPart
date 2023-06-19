@@ -12,6 +12,7 @@ module ALU(
 `include "AluOp.vh"
 
 wire[63:0] sum = a + b;
+wire[63:0] sll = a << b[4:0];
 
 always @(*) begin
   case(alu_op)
@@ -26,6 +27,7 @@ always @(*) begin
     OR: res = a | b;
     AND: res = a & b;
     ADDW: res = {{32{sum[31]}},{sum[31:0]}};
+    SLLW: res = {{32{sll[31]}},{sll[31:0]}};
   endcase
   zero <= (res == 0);
 end

@@ -128,7 +128,15 @@ module MyControl(
         reg_write = 1;
         alu_op = ADDW;
       end
-
+      //===============================================
+      // addiw, slliw
+      7'b0011011: begin
+        reg_write = 1;
+        if(funct3 == 3'b000) // addiw
+          alu_op = ADDW;
+        if(funct3 == 3'b001) // slliw
+          alu_op = SLLW;
+      end
       //===============================================
       // add ,slt, sub, sra, xor, sll
       7'b0110011:begin
