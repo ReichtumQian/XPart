@@ -25,45 +25,46 @@ module CSR(
 //`define mtvec register[5]    // csr = 0x305
 //`define mepc register[]
 
-reg[63:0] mstatus;
-reg[63:0] mtvec;
-reg[63:0] mepc;
-reg[63:0] mcause;
+reg[63:0] sstatus;
+reg[63:0] stvec;
+reg[63:0] sepc;
+reg[63:0] scause;
+reg[63:0] satp;
 
 
 
 always @(negedge clk or posedge rst) begin
    if(rst) begin
-      mstatus <= 0;
-      mtvec <= 0;
-      mepc <= 0;
-      mcause <= 0;
+      sstatus <= 0;
+      stvec <= 0;
+      sepc <= 0;
+      scause <= 0;
     end
     else begin
       if(csr_write)begin
         case(csr_write_addr) 
-          12'h300: mstatus <= data_in;
-          12'h305: mtvec <= data_in;
-          12'h341: mepc <= data_in;
-          12'h342: mcause <= data_in;
+          12'h300: sstatus <= data_in;
+          12'h305: stvec <= data_in;
+          12'h341: sepc <= data_in;
+          12'h342: scause <= data_in;
         endcase
       end
       if(wb_ecall) begin // 如果 ecall 则保存 pc
-        mepc <= wb_pc;
+        sepc <= wb_pc;
       end
     
     if(id_ecall)begin
-      data_out <= mtvec;
+      data_out <= stvec;
     end
     else if(pc_src == 3) begin // mret
-      data_out <= mepc;
+      data_out <= sepc;
     end
     else begin
       case(csr_read_addr)
-        12'h300: data_out <= mstatus;
-        12'h305: data_out <= mtvec;
-        12'h341: data_out <= mepc ;
-        12'h342: data_out <= mcause ;
+        12'h300: data_out <= sstatus;
+        12'h305: data_out <= stvec;
+        12'h341: data_out <= sepc ;
+        12'h342: data_out <= scause ;
         default: data_out <= 0;
       endcase
     end
