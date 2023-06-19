@@ -592,6 +592,7 @@ module SCPU(
                   pc <= btb_read_predict_pc;
                 else pc <= pc + 4;
               end
+            end
             // end bge
             // =========================================
             // begin bltu
