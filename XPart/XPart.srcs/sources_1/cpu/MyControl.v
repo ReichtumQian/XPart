@@ -71,11 +71,11 @@ module MyControl(
       //===============================================
       // addi & slti
       7'b0010011:begin
-          reg_write = 1;
-          // addi
-          if(funct3 == 3'b000) begin alu_op = ADD;  end
-          // slti
-          if(funct3 == 3'b010) begin alu_op = SLT;  end
+        reg_write = 1;
+        // addi
+        if(funct3 == 3'b000) begin alu_op = ADD;  end
+        // slti
+        if(funct3 == 3'b010) begin alu_op = SLT;  end
       end
       //===============================================
       // lbu, lw, ld
@@ -122,6 +122,13 @@ module MyControl(
         mem_to_reg <= 3'b010;
         alu_op <= 0; //¼Ó·¨
       end
+      //===============================================
+      // addw
+      7'b0111011: begin
+        reg_write = 1;
+        alu_op = ADDW;
+      end
+
       //===============================================
       // add ,slt, sub, sra, xor, sll
       7'b0110011:begin

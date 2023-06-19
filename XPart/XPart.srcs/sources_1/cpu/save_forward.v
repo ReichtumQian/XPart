@@ -40,7 +40,7 @@ always@(*) begin
     save_mask = 64'h0000_0000_ffff_ffff;
   end
   else if(mem_funct3 == 3'b011) begin // sd
-    save_mask = 64'hffff_ffff_ffff_ffff
+    save_mask = 64'hffff_ffff_ffff_ffff;
   end
 
   // Ñ¡Ôñ data_out
