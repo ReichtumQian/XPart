@@ -235,7 +235,7 @@ module MyControl(
       7'b1110011:begin
         case(funct3)
           //--------------------------
-          // ecall & mret
+          // ecall & mret & sret
           3'b000:begin
             if(funct12 == 0) begin  // ecall
               // pc 来自于 mtvec
@@ -243,11 +243,13 @@ module MyControl(
               ecall <= 1;
               //csr_write <= 1;  虽然要把 pc +4 写入 mepc，但 CSR 内部已经写了，不需要 WB 阶段重写
             end
-            if(funct12 == 12'h302) begin  // mret
-              // pc 来自于 mepc
+            // if(funct12 == 12'h302) begin  // mret
+            //   // pc 来自于 mepc
+            //   pc_src <= 2'b11;
+            //   //csr_write <= 1;
+            // end
+            if(funct12 == 12'h102) begin // sret
               pc_src <= 2'b11;
-              //csr_write <= 1;
-              
             end
           end
           //--------------------------
@@ -266,16 +268,7 @@ module MyControl(
             alu_src_b <= 2; // 来自 CSR 寄存器
             csr_write <= 1;
             mem_to_reg <= 3'b100;
-            
           end
-          // CSRRC（只实现 csrc）
-//          3'b011: begin
-//            // csrc 功能
-//            csr_write <= 1;   // 最终要写回 csr 寄存器
-//            alu_op = AND;
-//            mem_to_reg <= 3'b100;
-//          end
-          // 由于没有用到立即数指令，因此此处不实现
         endcase
         
       end
