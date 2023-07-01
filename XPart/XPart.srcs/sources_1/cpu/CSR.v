@@ -31,6 +31,7 @@ always @(negedge clk or negedge rst) begin
       stvec <= 0;
       sepc <= 0;
       scause <= 0;
+      satp <= 0;
     end
     else begin
       if(csr_write)begin
