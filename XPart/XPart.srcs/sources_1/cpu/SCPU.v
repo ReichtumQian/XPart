@@ -516,7 +516,7 @@ module SCPU(
     // deal with PC
     always@(posedge clk or posedge rst)begin
       if(rst) begin
-        pc <= 64'h8000_0000; // begin at 0x8000_0000
+        pc <= 64'h8020_0000; // begin at 0x8000_0000
       end
       else begin
         // =========================================

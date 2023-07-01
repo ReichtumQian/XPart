@@ -60,7 +60,7 @@ module Core(
     assign mem_clk = ~clk_div[0]; // 50mhz
     assign cpu_clk = debug_mode ? clk_div[0] : step;  // debug mode 为1(sw15拨上时)时自动运行。。。否则按step运行
 
-    localparam start_addr = 64'h8000_0000;
+    localparam start_addr = 64'h8020_0000;
     
      Rom rom_unit (
         .clka(mem_clk), 
