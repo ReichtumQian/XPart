@@ -61,8 +61,11 @@ module Core(
     assign cpu_clk = debug_mode ? clk_div[0] : step;  // debug mode 为1(sw15拨上时)时自动运行。。。否则按step运行
     
      Rom rom_unit (
-         .addra(pc_out/4),  // 地址输入
-         .douta(inst) // 从目标地址读取出指令
+        .clka(mem_clk), 
+        .wea(0),
+        .addra(pc_out/4),  // 地址输入
+        .dina(0),
+        .douta(inst) // 从目标地址读取出指令
      );
 
 //    myRom rom_unit(
