@@ -31,7 +31,7 @@ module Top(
     Core chip_inst(
         .clk(clk),  // 从 Top 输入
         .aresetn(aresetn),  // 从 IO-Manager 输入
-        .step(step),    // 从 IO-Manager 输入
+        .step(step)    // 从 IO-Manager 输入
 //        .debug_mode(switch[15]),  // 从 Top 输入
         // .debug_mode(switch[0]),
         // .debug_reg_addr(switch[11:7]),
