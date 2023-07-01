@@ -11,8 +11,8 @@ module Regs(
 
 
   //²âÊÔÊı¾İ
-  // input wire[4:0] debug_reg_addr,
-  // output wire[63:0] debug_reg_out,
+  input wire[4:0] debug_reg_addr,
+  output wire[63:0] debug_reg_out,
   
   output[63:0] read_data_1,
   output[63:0] read_data_2
