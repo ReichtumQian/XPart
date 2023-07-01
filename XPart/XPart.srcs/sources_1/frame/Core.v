@@ -59,11 +59,13 @@ module Core(
     end
     assign mem_clk = ~clk_div[0]; // 50mhz
     assign cpu_clk = debug_mode ? clk_div[0] : step;  // debug mode 为1(sw15拨上时)时自动运行。。。否则按step运行
+
+    localparam start_addr = 64'h8000_0000;
     
      Rom rom_unit (
         .clka(mem_clk), 
         .wea(0),
-        .addra(pc_out/4),  // 地址输入
+        .addra((pc_out - start_addr)/4),  // 地址输入
         .dina(0),
         .douta(inst) // 从目标地址读取出指令
      );
