@@ -6,41 +6,55 @@ module MMU(
   input clk,
   input[63:0] va,
   input[63:0] satp,
-  output stop,
-  output [63:0] value 
+  input[63:0] mem_value,
+  output reg stop,
+  output reg[63:0] pa
 );
 
-reg[63:0] satp_before;
-reg satp_change; // is 1 if satp_before != satp
+wire[3:0] mode = satp[63:60]; // mode of MMU
+wire[43:0] root_page_ppn = satp[43:0]; // physical page number of level 1 page table
 
-reg[1:0] mmu_state;
+wire[11:0] offset = va[11:0];
+wire[8:0] vpn0 = va[20:12]; // virtual page number of level 0 page table
+wire[8:0] vpn1 = va[29:21]; // virtual page number of level 1 page table
+wire[8:0] vpn2 = va[38:30]; // virtual page number of level 2 page table
 
-parameter MMU_STATE_ONE = 2'b00,
-          MMU_STATE_TWO = 2'b01,
-          MMU_STATE_THREE = 2'b10; 
-          MMU_STATE_FOUR = 2'b11; 
+wire[9:0] flags = mem_value[9:0]; // flags of page table entry
 
-assign stop = !(satp == 0) && !(mmu_state == MMU_STATE_FOUR) || satp_change;
+reg[1:0] page_level;
 
-always @(*) begin
-  if(satp == 0) mmu_state = MMU_STATE_ONE;
-  satp_change = (satp_before != satp);
-end
-
-always @(negedge clk) begin
-  satp_before <= satp;
-end
-
-always @(posedge clk or posedge rst) begin
-  if(satp != 0) begin
-    case(mmu_state)
-    MMU_STATE_ONE: mmu_state = MMU_STATE_TWO;
-    MMU_STATE_TWO: mmu_state = MMU_STATE_THREE;
-    MMU_STATE_THREE: mmu_state = MMU_STATE_FOUR;
-    MMU_STATE_FOUR: mmu_state = MMU_STATE_ONE;
-    endcase
+always@(posedge clk or posedge rst) begin
+  if(rst) begin
+    stop = 0;
+    page_level = 0;
+    pa = 0;
+  end
+  else begin
+    // -----------------------------------------
+    // satp == 0
+    if(mode == 0) begin
+      pa <= va;
+      stop <= 0;
+    end
+    // -----------------------------------------
+    // sv39 mode
+    if(mode == 8) begin
+      if(page_level != 0 && flags[3:1] != 0) begin  // rwx are not all zero, then this page is the last page
+        pa = {{mem_value[53:10]}, {offset}};
+        page_level = 0;
+        stop = 0;
+      end
+      else begin // the page is not the last page
+        case(page_level)
+          0: pa = (root_page_ppn << 12) + vpn2;
+          1: pa = ((mem_value[53:10]) << 12) + vpn1;
+          2: pa = ((mem_value[53:10]) << 12) + vpn0;
+        endcase
+        stop = 1;
+        page_level = page_level + 1;
+      end
+    end
   end
 end
-
 
 endmodule
