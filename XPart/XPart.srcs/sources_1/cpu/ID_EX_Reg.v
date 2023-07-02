@@ -35,6 +35,7 @@ module ID_EX_Reg(
   
   input stall,
   input is_load,
+  input stop,
   
   
   
@@ -85,6 +86,7 @@ Control_Signal_Reg control_signal_reg(
   .rst(rst),
   .stall(stall),
   .is_load(is_load),
+  .stop(stop),
 
   .pc_src_in(pc_src_in),
   .reg_write_in(reg_write_in),
@@ -121,6 +123,8 @@ always @(posedge clk or posedge rst) begin
     inst <= 0;
     imm <= 0;
     predict <= 0;
+  end
+  else if(stop) begin
   end
   else begin
     data1 <= data1_in;

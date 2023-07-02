@@ -4,6 +4,7 @@ module Regs(
   input clk,
   input rst,   //复位信号，如果为1，则所有寄存器清零
   input we,    // 写信号，如果为1，则允许写寄存器
+  input stop,
   input[4:0] read_addr_1,  // 读取的寄存器标号
   input[4:0] read_addr_2,
   input[4:0] write_addr,   // 写入的寄存器标号
@@ -35,7 +36,10 @@ module Regs(
       for (i = 0; i <= 31; i = i + 1) begin
         register[i] <= 0;
       end
-    end else begin
+    end 
+    else if(stop) begin
+    end
+    else begin
       if (we == 1 && write_addr != 0) begin
         register[write_addr] <= write_data;
       end

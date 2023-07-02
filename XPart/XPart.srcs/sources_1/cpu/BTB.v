@@ -4,6 +4,7 @@ module BTB(
   input clk,
   input rst,
   input[63:0] read_pc,
+  input stop,
   output reg[63:0] read_predict_pc,
   output reg read_found,  // 1: found, 0: not found
   input[63:0] write_pc,
@@ -24,6 +25,8 @@ always @(negedge clk) begin
       read_found <= 0;
     end
   end 
+  else if(stop) begin
+  end
   else begin
     // read pc
     read_found = 0;

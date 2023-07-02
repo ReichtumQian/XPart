@@ -10,6 +10,8 @@ module IF_ID_Reg(
   input[31:0] inst_in,
   input predict_in, // predict whether to take branch
 
+  input stop,
+
   // output: inst & pc
   output[31:0] inst_out,
   output[63:0] pc_out,
@@ -36,6 +38,7 @@ always @(posedge clk or posedge rst) begin
     pc <= 0;
     inst <= 0;
     predict <= 0;
+  end else if(stop) begin
   end else begin
     pc   <= pc_in;
     inst <= inst_in;

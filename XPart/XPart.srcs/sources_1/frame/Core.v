@@ -41,6 +41,7 @@ module Core(
         .rst(rst),
         .inst(inst),
         .data_in(core_data_in),      //从数据内存读取的数据，load指令需要用
+        .stop(0),
 
         //测试部分
         // .debug_reg_addr(debug_reg_addr),

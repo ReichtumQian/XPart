@@ -6,6 +6,7 @@ module SCPU(
     input         rst,
     input  [31:0] inst,  //32位指令
     input  [63:0] data_in,  // 内存读入数据
+    input stop,  // 暂停流水线
 
     //测试数据
     // input wire[4:0] debug_reg_addr,
@@ -152,13 +153,17 @@ module SCPU(
     reg stall;
     reg stall_before;
     always@(posedge clk) begin
-          stall_before <= stall;
+      if(stop) begin
+      end
+      else stall_before <= stall;
     end
     // 判断是否为 load 指令
     wire is_load;
     reg is_load_before;
     always@(posedge clk) begin
-          is_load_before <= is_load;
+      if(stop) begin
+      end
+      else is_load_before <= is_load;
     end
     
     // forward unit
@@ -232,6 +237,7 @@ module SCPU(
           .inst_in(if_inst),
           .predict_in(bht_predict),
           .predict_out(id_predict),
+          .stop(stop),
     
           // output
           .rs_out(id_rs1),
@@ -244,6 +250,7 @@ module SCPU(
     BHT bht(
       .clk(clk),
       .rst(rst),
+      .stop(stop),
       .read_pc(if_pc),
       .read_predict(bht_predict),
       .write_pc(mem_pc),
@@ -254,6 +261,7 @@ module SCPU(
     BTB btb(
       .clk(clk),
       .rst(rst),
+      .stop(stop),
       .read_pc(if_pc),
       .read_predict_pc(btb_read_predict_pc),
       .read_found(btb_read_found),
@@ -269,6 +277,7 @@ module SCPU(
       // 输入
       .clk(clk),
       .rst(rst),
+      .stop(stop),
       .we(wb_reg_write),
       .read_addr_1(id_rs1),
       .read_addr_2(id_rs2),
@@ -324,6 +333,7 @@ module SCPU(
     CSR csr(
       .clk(clk),
       .rst(rst),
+      .stop(stop),
       .csr_write(wb_csr_write),
       .id_ecall(id_ecall),
       .wb_ecall(wb_ecall),
@@ -366,6 +376,7 @@ module SCPU(
           
           .stall(stall),
           .is_load(is_load_before),
+          .stop(stop),
     
           .data1_out(ex_data1),
           .data2_out(ex_data2),
@@ -466,6 +477,7 @@ module SCPU(
       .csr_data_out_in(ex_csr_data_out),
       
       .stall(stall),
+      .stop(stop),
 
       .inst_out(mem_inst),
       .pc_out(mem_pc),
@@ -517,6 +529,8 @@ module SCPU(
     always@(posedge clk or posedge rst)begin
       if(rst) begin
         pc <= 64'h8020_0000; // begin at 0x8000_0000
+      end
+      else if(stop) begin
       end
       else begin
         // =========================================
@@ -647,6 +661,8 @@ module SCPU(
           if(rst) begin
             stall <= 0;
           end
+          else if(stop) begin
+          end
           else if(stall) begin
             stall <= 0;
             bht_write <= 0;
@@ -775,6 +791,7 @@ module SCPU(
       .csr_data_out_in(mem_csr_data_out),
       
       .stall(0),
+      .stop(stop),
 
       .inst_out(wb_inst),
       .pc_out(wb_pc),

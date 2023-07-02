@@ -35,6 +35,7 @@ module MEM_WB_Reg(
   input[63:0] memory_data_in,
   
   input stall,
+  input stop,
 
   // output alu result
   output[63:0] alu_result_out,
@@ -93,6 +94,7 @@ Control_Signal_Reg control_signal_reg(
   .csr_ecall_in(csr_ecall_in),
   .csr_data_out_in(csr_data_out_in),
   .stall(stall),
+  .stop(stop),
 
   .pc_src_out(pc_src_out),
   .reg_write_out(reg_write_out),
@@ -115,6 +117,8 @@ always @(posedge clk or posedge rst) begin
     inst <= 0;
     imm <= 0;
     memory_data <= 0;
+  end
+  else if(stop) begin
   end
   else begin
     alu_result <= alu_result_in;

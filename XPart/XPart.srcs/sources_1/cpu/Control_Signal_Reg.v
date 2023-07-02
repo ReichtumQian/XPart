@@ -19,6 +19,7 @@ module Control_Signal_Reg(
   
   input stall,
   input is_load,
+  input stop,
 
   output[1:0] pc_src_out,
   output reg_write_out,
@@ -70,6 +71,8 @@ always @(posedge clk) begin
     csr_write <= 0;
     csr_ecall <= 0;
     csr_data_out <= 0;
+  end
+  else if(stop) begin
   end
   else begin
     pc_src <= pc_src_in;

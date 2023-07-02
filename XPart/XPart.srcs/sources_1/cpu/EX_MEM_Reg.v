@@ -29,6 +29,7 @@ module EX_MEM_Reg(
   input[63:0] csr_data_out_in, 
   
   input stall,
+  input stop,
 
   // input: ALU zero
   input zero_in,
@@ -100,6 +101,7 @@ Control_Signal_Reg control_signal_reg(
   .csr_ecall_in(csr_ecall_in),
   .csr_data_out_in(csr_data_out_in),
   .stall(stall),
+  .stop(stop),
 
   .pc_src_out(pc_src_out),
   .reg_write_out(reg_write_out),
@@ -123,6 +125,8 @@ always @(posedge clk or posedge rst) begin
     imm <= 0;
     data2 <= 0;
     predict <= 0;
+  end
+  else if(stop) begin
   end
   else begin
     alu_result <= alu_result_in;

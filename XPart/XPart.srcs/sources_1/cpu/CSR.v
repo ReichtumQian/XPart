@@ -8,6 +8,7 @@ module CSR(
   input csr_write,  // 是否写 CSR 寄存器
   input id_ecall,      // 是否是 ecall 指令（如果是则需要写 PC）
   input wb_ecall,
+  input stop,
   input[11:0] csr_read_addr,  // 读取的目标 CSR 寄存器（因为读写不同步）
   input[11:0] csr_write_addr, // 写入的目标 CSR 寄存器
   input[63:0] data_in,
@@ -32,6 +33,8 @@ always @(negedge clk or negedge rst) begin
       sepc <= 0;
       scause <= 0;
       satp <= 0;
+    end
+    else if(stop) begin
     end
     else begin
       if(csr_write)begin

@@ -5,6 +5,7 @@ module BHT(
   input clk,
   input rst,
   input[63:0] read_pc,
+  input stop,
   output read_predict,
   input[63:0] write_pc,  // pc to write
   input write_predict ,  // 1: taken, 0: not taken
@@ -33,7 +34,9 @@ always @(negedge clk) begin
     for (i = 0; i <= 255; i = i + 1) begin
       predict_table[i] <= 0;
     end
-  end else begin
+  end else if(stop) begin
+  end
+  else begin
     if (write == 1) begin // need to write predict table
       predict_table[write_index][57:2] <= write_tag;
       if(write_predict == 1) begin
