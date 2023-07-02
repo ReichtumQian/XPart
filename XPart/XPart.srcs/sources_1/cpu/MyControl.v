@@ -69,13 +69,38 @@ module MyControl(
       // auipc
       7'b0010111: begin reg_write = 1'b1; mem_to_reg = 3'b101;   end
       //===============================================
-      // addi & slti
+      // addi, slti, srai, srli, slli, xori, ori, andi
       7'b0010011:begin
         reg_write = 1;
+        alu_src_b = 1;
         // addi
         if(funct3 == 3'b000) begin alu_op = ADD;  end
+        // slli
+        if(funct3 == 3'b001) begin alu_op <= SLL; end
         // slti
         if(funct3 == 3'b010) begin alu_op = SLT;  end
+        // xori
+        if(funct3 == 3'b100) begin
+          alu_op <= XOR;
+        end
+        // ori
+        if(funct3 == 3'b110)begin
+          alu_op <= OR;
+        end
+        // andi
+        if(funct3 == 3'b111)begin
+          alu_op <= AND;
+        end
+        if(funct3 == 3'b101)begin
+          // srli
+          if(funct7_5 == 1'b0) begin
+            alu_op <= SRL;
+          end
+          // srai
+          if(funct7_5 == 1'b1) begin
+            alu_op <= SRA;
+          end
+        end
       end
       //===============================================
       // lbu, lw, ld
@@ -137,6 +162,7 @@ module MyControl(
       // addiw, slliw
       7'b0011011: begin
         reg_write = 1;
+        alu_src_b = 1;
         if(funct3 == 3'b000) // addiw
           alu_op = ADDW;
         if(funct3 == 3'b001) // slliw
@@ -201,35 +227,6 @@ module MyControl(
         end
       end
       
-      //===============================================
-      // srai, srli, xori, ori, andi
-      7'b0010011: begin
-        reg_write = 1; // 写寄存器
-        alu_src_b = 1; // 来自立即数
-
-        // xori
-        if(funct3 == 3'b100) begin
-          alu_op <= XOR;
-        end
-        // ori
-        if(funct3 == 3'b110)begin
-          alu_op <= OR;
-        end
-        // andi
-        if(funct3 == 3'b111)begin
-          alu_op <= AND;
-        end
-        if(funct3 == 3'b101)begin
-          // srli
-          if(funct7_5 == 1'b0) begin
-            alu_op <= SRL;
-          end
-          // srai
-          if(funct7_5 == 1'b1) begin
-            alu_op <= SRA;
-          end
-        end
-      end
       //===============================================
       // CSR ops
       7'b1110011:begin

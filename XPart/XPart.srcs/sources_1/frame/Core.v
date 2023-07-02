@@ -82,7 +82,7 @@ module Core(
      Ram ram_unit (
          .clka(mem_clk),  // 时钟
          .wea(mem_write_debug),   // 1 写内存，0读内存
-         .addra(addr_out/4), // 输入：读or写内存的地址
+         .addra((addr_out - start_addr)/4), // 输入：读or写内存的地址
          .dina(core_data_out),  // 输入：要写的数据
          .douta(core_data_in)  // 输出：读取的数据
      );
