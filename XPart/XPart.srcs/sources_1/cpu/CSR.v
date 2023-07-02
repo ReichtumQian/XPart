@@ -58,7 +58,7 @@ always @(negedge clk or negedge rst) begin
         12'h105: data_out <= stvec;
         12'h141: data_out <= sepc ;
         12'h142: data_out <= scause ;
-        12'h180: satp <= data_in;
+        12'h180: data_out <= satp;
         default: data_out <= 0;
       endcase
     end
