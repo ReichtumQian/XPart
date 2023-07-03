@@ -18,7 +18,7 @@ module myRam(
     assign read_data = ram[address];
 
 
-    localparam FILE_PATH = "";
+//    localparam FILE_PATH = "";
     initial begin
       for(i = 0; i < 4096; i = i+1) begin
         ram[i] = 0;

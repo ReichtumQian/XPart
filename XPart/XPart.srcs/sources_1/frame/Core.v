@@ -66,12 +66,13 @@ module Core(
       .va(addr_out),
       .satp(satp),
       .mem_value(core_data_in),
-      .stop(rom_mmu_stop),
+      .stop(ram_mmu_stop),
       .pa(addr_out_pa)
     );
 
 
     localparam start_addr = 64'h8020_0000;
+    localparam end_addr = 64'h8020_8000;
     
 //     Rom rom_unit (
 //        .clka(mem_clk), 
@@ -101,7 +102,7 @@ module Core(
     myRam ram_unit(
         .clk(mem_clk),
         .we(mem_write),
-        .address((addr_out_pa - start_addr)/4),  // 注意地址是除以 4 的！！！！！！！！！！
+        .address((end_addr - addr_out_pa)/4),  // 注意地址是除以 4 的！！！！！！！！！！
         .write_data(core_data_out),
         .read_data(core_data_in)
     );
