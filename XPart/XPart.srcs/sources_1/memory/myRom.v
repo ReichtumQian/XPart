@@ -2,13 +2,13 @@
 
 
 module myRom(
-    input [10:0] address,
+    input [11:0] address,
     output [31:0] out
 );
-    reg [31:0] rom [0:2047];
+    reg [31:0] rom [0:4095];
 
 
-    localparam FILE_PATH = "../../../../lab2_rom.sim";
+    localparam FILE_PATH = "../../../../../Software/kernel.sim";
     initial begin
         $readmemh(FILE_PATH, rom);
     end

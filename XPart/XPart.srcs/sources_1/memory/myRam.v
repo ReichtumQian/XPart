@@ -4,11 +4,11 @@
 module myRam(
     input clk,
     input we,
-    input [31:0] write_data,
-    input [10:0] address,
-    output [31:0] read_data
+    input [63:0] write_data,
+    input [11:0] address,
+    output [63:0] read_data
     );
-    reg [31:0] ram [0:2047];
+    reg [63:0] ram [0:4095];
     integer i;
 
     always @(posedge clk) begin
@@ -18,8 +18,8 @@ module myRam(
     assign read_data = ram[address];
 
 
-    localparam FILE_PATH = "../../../../lab2_ram.sim";
+    localparam FILE_PATH = "";
     initial begin
-        $readmemh(FILE_PATH, ram);
+//        $readmemh(FILE_PATH, ram);
     end
 endmodule

@@ -73,38 +73,38 @@ module Core(
 
     localparam start_addr = 64'h8020_0000;
     
-     Rom rom_unit (
-        .clka(mem_clk), 
-        .wea(0),
-        .addra((pc_out_pa - start_addr)/4),  // 地址输入
-        .dina(0),
-        .douta(inst) // 从目标地址读取出指令
-     );
+//     Rom rom_unit (
+//        .clka(mem_clk), 
+//        .wea(0),
+//        .addra((pc_out_pa - start_addr)/4),  // 地址输入
+//        .dina(0),
+//        .douta(inst) // 从目标地址读取出指令
+//     );
 
-//    myRom rom_unit(
-//        .address(pc_out/4),
-//        .out(inst)
-//    );
+    myRom rom_unit(
+        .address((pc_out_pa - start_addr)/4),
+        .out(inst)
+    );
     
     // 添加debug_mode
     wire mem_write_debug = step ? 0: mem_write;
     wire[63:0] addr_out_debug = step ? data_in: addr_out;
 
-     Ram ram_unit (
-         .clka(mem_clk),  // 时钟
-         .wea(mem_write_debug),   // 1 写内存，0读内存
-         .addra((addr_out_pa - start_addr)/4), // 输入：读or写内存的地址
-         .dina(core_data_out),  // 输入：要写的数据
-         .douta(core_data_in)  // 输出：读取的数据
-     );
+//     Ram ram_unit (
+//         .clka(mem_clk),  // 时钟
+//         .wea(mem_write_debug),   // 1 写内存，0读内存
+//         .addra((addr_out_pa - start_addr)/4), // 输入：读or写内存的地址
+//         .dina(core_data_out),  // 输入：要写的数据
+//         .douta(core_data_in)  // 输出：读取的数据
+//     );
 
-//    myRam ram_unit(
-//        .clk(mem_clk),
-//        .we(mem_write),
-//        .address(addr_out/4),  // 注意地址是除以 4 的！！！！！！！！！！
-//        .write_data(core_data_out),
-//        .read_data(core_data_in)
-//    );
+    myRam ram_unit(
+        .clk(mem_clk),
+        .we(mem_write),
+        .address((addr_out_pa - start_addr)/4),  // 注意地址是除以 4 的！！！！！！！！！！
+        .write_data(core_data_out),
+        .read_data(core_data_in)
+    );
     
     
     
