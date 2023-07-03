@@ -12,6 +12,7 @@ module SCPU(
     // input wire[4:0] debug_reg_addr,
     // output wire[63:0] debug_reg_out,
 
+    output [63:0] satp,
     output [63:0] addr_out, //  要写/读的数据内存地址  
     output [63:0] data_out, // 要写的数据
     output [63:0] pc_out,   // 更改后的 pc 值
@@ -340,6 +341,7 @@ module SCPU(
       .data_in(wb_alu_result),
       .csr_read_addr(id_csr_addr),    // 如果读则是在 id 阶段读  
       .csr_write_addr(wb_csr_addr),   // 如果写则是在 wb 阶段写
+      .satp_out(satp),
       
       .wb_pc(wb_pc),
       .pc_src(id_pc_src),

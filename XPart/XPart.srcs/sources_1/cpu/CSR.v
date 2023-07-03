@@ -11,6 +11,8 @@ module CSR(
   input stop,
   input[11:0] csr_read_addr,  // 读取的目标 CSR 寄存器（因为读写不同步）
   input[11:0] csr_write_addr, // 写入的目标 CSR 寄存器
+  output[63:0] satp_out,
+
   input[63:0] data_in,
   input[63:0] wb_pc,   // mepc 可能要保存 pc 的值
   input[1:0] pc_src,   // 用于判断是否为 ecall 和 mret
@@ -23,6 +25,7 @@ reg[63:0] stvec;   // 0x105
 reg[63:0] sepc;    // 0x141
 reg[63:0] scause;  // 0x142
 reg[63:0] satp;    // 0x180
+assign satp_out = satp;
 
 
 

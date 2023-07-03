@@ -33,26 +33,10 @@ module Core(
     wire [31:0] inst;
     wire [63:0] core_data_in, addr_out, core_data_out, pc_out;
     reg  [63:0] clk_div;  // 时钟记录器，记录经过了多少个时钟周期
+    wire [63:0] satp;
     
     assign rst = ~aresetn;
      wire [63:0] debug_reg_out;
-    SCPU cpu(
-        .clk(cpu_clk),
-        .rst(rst),
-        .inst(inst),
-        .data_in(core_data_in),      //从数据内存读取的数据，load指令需要用
-        .stop(0),
-
-        //测试部分
-        // .debug_reg_addr(debug_reg_addr),
-        // .debug_reg_out(debug_reg_out),
-        
-        // 以下为输出
-        .addr_out(addr_out),         // 要写的数据内存地址
-        .data_out(core_data_out),    // 要写入数据内存的值
-        .pc_out(pc_out),             // 更改后的 pc 值
-        .mem_write(mem_write)        // 是否写入数据内存
-    );
     
     always @(posedge clk) begin
         if(rst) clk_div <= 0;
@@ -61,12 +45,38 @@ module Core(
     assign mem_clk = ~clk_div[0]; // 50mhz
     assign cpu_clk = debug_mode ? clk_div[0] : step;  // debug mode 为1(sw15拨上时)时自动运行。。。否则按step运行
 
+    wire rom_mmu_stop;
+    wire ram_mmu_stop;
+    wire [63:0] pc_out_pa;
+    wire [63:0] addr_out_pa;
+    wire stop = rom_mmu_stop | ram_mmu_stop;
+    MMU rom_mmu(
+      .rst(rst),
+      .clk(mem_clk),
+      .va(pc_out),
+      .satp(satp),
+      .mem_value(core_data_in),
+      .stop(rom_mmu_stop),
+      .pa(pc_out_pa)
+    );
+
+    MMU ram_mmu(
+      .rst(rst),
+      .clk(mem_clk),
+      .va(addr_out),
+      .satp(satp),
+      .mem_value(core_data_in),
+      .stop(rom_mmu_stop),
+      .pa(addr_out_pa)
+    );
+
+
     localparam start_addr = 64'h8020_0000;
     
      Rom rom_unit (
         .clka(mem_clk), 
         .wea(0),
-        .addra((pc_out - start_addr)/4),  // 地址输入
+        .addra((pc_out_pa - start_addr)/4),  // 地址输入
         .dina(0),
         .douta(inst) // 从目标地址读取出指令
      );
@@ -83,7 +93,7 @@ module Core(
      Ram ram_unit (
          .clka(mem_clk),  // 时钟
          .wea(mem_write_debug),   // 1 写内存，0读内存
-         .addra((addr_out - start_addr)/4), // 输入：读or写内存的地址
+         .addra((addr_out_pa - start_addr)/4), // 输入：读or写内存的地址
          .dina(core_data_out),  // 输入：要写的数据
          .douta(core_data_in)  // 输出：读取的数据
      );
@@ -105,5 +115,24 @@ module Core(
      assign chip_debug_out2 = debug_reg_out;  // 寄存器内容
      assign chip_debug_out3 = inst; //指令的值
 
+
+    SCPU cpu(
+        .clk(cpu_clk),
+        .rst(rst),
+        .inst(inst),
+        .data_in(core_data_in),      //从数据内存读取的数据，load指令需要用
+        .stop(stop),
+
+        //测试部分
+        // .debug_reg_addr(debug_reg_addr),
+        // .debug_reg_out(debug_reg_out),
+        
+        // 以下为输出
+        .satp(satp),                 // satp 寄存器
+        .addr_out(addr_out),         // 要写的数据内存地址
+        .data_out(core_data_out),    // 要写入数据内存的值
+        .pc_out(pc_out),             // 更改后的 pc 值
+        .mem_write(mem_write)        // 是否写入数据内存
+    );
 
 endmodule
