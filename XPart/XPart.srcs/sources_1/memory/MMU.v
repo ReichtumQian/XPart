@@ -25,14 +25,16 @@ reg[1:0] page_level;
 
 always@(posedge clk or posedge rst) begin
   if(rst) begin
-    stop = 0;
     page_level = 0;
   end
   else begin
     // -----------------------------------------
     // sv39 mode
     if(mode == 8) begin
-      if(page_level != 0 && flags[3:1] != 0) begin  // rwx are not all zero, then this page is the last page
+      if(page_level != 0 && mem_value == 0) begin
+        page_level = 0;
+      end
+      else if(page_level != 0 && flags[3:1] != 0) begin  // rwx are not all zero, then this page is the last page
         page_level = 0;
       end
       else begin // the page is not the last page
@@ -45,6 +47,7 @@ end
 always@(*) begin
   if(rst) begin
     pa = 0;
+    stop <= 0;
   end
   else begin
     // -----------------------------------------
@@ -56,7 +59,11 @@ always@(*) begin
     // -----------------------------------------
     // sv39 mode
     if(mode == 8) begin
-      if(page_level != 0 && flags[3:1] != 0) begin  // rwx are not all zero, then this page is the last page
+      if(page_level != 0 && mem_value == 0) begin
+        pa = va;
+        stop = 0;
+      end
+      else if(page_level != 0 && flags[3:1] != 0) begin  // rwx are not all zero, then this page is the last page
         pa = {{mem_value[53:10]}, {offset}};
         stop = 0;
       end
