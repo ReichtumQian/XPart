@@ -20,6 +20,9 @@ module myRam(
 
     localparam FILE_PATH = "";
     initial begin
+      for(i = 0; i < 4096; i = i+1) begin
+        ram[i] = 0;
+      end
 //        $readmemh(FILE_PATH, ram);
     end
 endmodule
