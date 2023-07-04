@@ -11,22 +11,18 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="5463333333fs"></ZoomStartTime>
-      <ZoomEndTime time="6587333334fs"></ZoomEndTime>
-      <Cursor1Time time="6400000000fs"></Cursor1Time>
+      <ZoomStartTime time="60000000fs"></ZoomStartTime>
+      <ZoomEndTime time="1188000001fs"></ZoomEndTime>
+      <Cursor1Time time="1000000000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="157"></NameColumnWidth>
-      <ValueColumnWidth column_width="59"></ValueColumnWidth>
+      <NameColumnWidth column_width="154"></NameColumnWidth>
+      <ValueColumnWidth column_width="58"></ValueColumnWidth>
    </column_width_setting>
    <WVObjectSize size="22" />
    <wvobject fp_name="/Core_tb/clk" type="logic">
       <obj_property name="ElementShortName">clk</obj_property>
       <obj_property name="ObjectShortName">clk</obj_property>
-   </wvobject>
-   <wvobject fp_name="/Core_tb/uut/cpu/alu/alu_op" type="array">
-      <obj_property name="ElementShortName">alu_op[3:0]</obj_property>
-      <obj_property name="ObjectShortName">alu_op[3:0]</obj_property>
    </wvobject>
    <wvobject fp_name="/Core_tb/uut/cpu/pc" type="array">
       <obj_property name="ElementShortName">pc[63:0]</obj_property>
@@ -56,13 +52,13 @@
       <obj_property name="ElementShortName">stall</obj_property>
       <obj_property name="ObjectShortName">stall</obj_property>
    </wvobject>
-   <wvobject fp_name="/Core_tb/uut/cpu/ex_mem_reg/control_signal_reg/pc_src_in" type="array">
-      <obj_property name="ElementShortName">pc_src_in[1:0]</obj_property>
-      <obj_property name="ObjectShortName">pc_src_in[1:0]</obj_property>
+   <wvobject fp_name="/Core_tb/uut/rom_mmu_stop" type="logic">
+      <obj_property name="ElementShortName">rom_mmu_stop</obj_property>
+      <obj_property name="ObjectShortName">rom_mmu_stop</obj_property>
    </wvobject>
-   <wvobject fp_name="/Core_tb/uut/cpu/ex_mem_reg/control_signal_reg/pc_src_out" type="array">
-      <obj_property name="ElementShortName">pc_src_out[1:0]</obj_property>
-      <obj_property name="ObjectShortName">pc_src_out[1:0]</obj_property>
+   <wvobject fp_name="/Core_tb/uut/ram_mmu_stop" type="logic">
+      <obj_property name="ElementShortName">ram_mmu_stop</obj_property>
+      <obj_property name="ObjectShortName">ram_mmu_stop</obj_property>
    </wvobject>
    <wvobject fp_name="/Core_tb/uut/cpu/stop" type="logic">
       <obj_property name="ElementShortName">stop</obj_property>
@@ -72,15 +68,19 @@
       <obj_property name="ElementShortName">csr_write</obj_property>
       <obj_property name="ObjectShortName">csr_write</obj_property>
    </wvobject>
-   <wvobject fp_name="/Core_tb/uut/rom_mmu/va" type="array">
-      <obj_property name="ElementShortName">va[63:0]</obj_property>
-      <obj_property name="ObjectShortName">va[63:0]</obj_property>
+   <wvobject fp_name="/Core_tb/uut/pc_out_pa" type="array">
+      <obj_property name="ElementShortName">pc_out_pa[63:0]</obj_property>
+      <obj_property name="ObjectShortName">pc_out_pa[63:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/Core_tb/uut/rom_mmu/pa" type="array">
-      <obj_property name="ElementShortName">pa[63:0]</obj_property>
-      <obj_property name="ObjectShortName">pa[63:0]</obj_property>
+   <wvobject fp_name="/Core_tb/uut/addr_out_pa" type="array">
+      <obj_property name="ElementShortName">addr_out_pa[63:0]</obj_property>
+      <obj_property name="ObjectShortName">addr_out_pa[63:0]</obj_property>
    </wvobject>
    <wvobject fp_name="/Core_tb/uut/rom_mmu/page_level" type="array">
+      <obj_property name="ElementShortName">page_level[2:0]</obj_property>
+      <obj_property name="ObjectShortName">page_level[2:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/Core_tb/uut/ram_mmu/page_level" type="array">
       <obj_property name="ElementShortName">page_level[2:0]</obj_property>
       <obj_property name="ObjectShortName">page_level[2:0]</obj_property>
    </wvobject>
