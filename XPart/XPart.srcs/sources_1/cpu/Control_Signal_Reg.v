@@ -59,7 +59,7 @@ assign csr_ecall_out = csr_ecall;
 assign csr_data_out_out = csr_data_out;
 
 always @(posedge clk) begin
-  if(rst || stall || is_load) begin
+  if(rst) begin
     pc_src <= 0;
     reg_write <= 0;
     alu_src_b <= 0;
@@ -73,6 +73,19 @@ always @(posedge clk) begin
     csr_data_out <= 0;
   end
   else if(stop) begin
+  end
+  else if(stall || is_load) begin
+    pc_src <= 0;
+    reg_write <= 0;
+    alu_src_b <= 0;
+    branch <= 0;
+    b_type <= 0;
+    alu_op <= 0;
+    mem_to_reg <= 0;
+    mem_write <= 0;
+    csr_write <= 0;
+    csr_ecall <= 0;
+    csr_data_out <= 0;
   end
   else begin
     pc_src <= pc_src_in;

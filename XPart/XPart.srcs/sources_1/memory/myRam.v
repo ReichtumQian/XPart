@@ -6,7 +6,9 @@ module myRam(
     input we,
     input [63:0] write_data,
     input [11:0] address,
-    output [63:0] read_data
+    output [63:0] read_data,
+    input [11:0] address2,
+    output[63:0] read_data2
     );
     reg [63:0] ram [0:4095];
     integer i;
@@ -16,6 +18,7 @@ module myRam(
     end
 
     assign read_data = ram[address];
+    assign read_data2 = ram[address2];
 
 
 //    localparam FILE_PATH = "";

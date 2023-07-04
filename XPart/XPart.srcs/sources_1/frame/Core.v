@@ -49,13 +49,14 @@ module Core(
     wire ram_mmu_stop;
     wire [63:0] pc_out_pa;
     wire [63:0] addr_out_pa;
+    wire [63:0] rom_mmu_mem_value;
     wire stop = rom_mmu_stop | ram_mmu_stop;
     MMU rom_mmu(
       .rst(rst),
       .clk(mem_clk),
       .va(pc_out),
       .satp(satp),
-      .mem_value(core_data_in),
+      .mem_value(rom_mmu_mem_value),
       .stop(rom_mmu_stop),
       .pa(pc_out_pa)
     );
@@ -104,7 +105,9 @@ module Core(
         .we(mem_write),
         .address((end_addr - addr_out_pa)/4),  // 注意地址是除以 4 的！！！！！！！！！！
         .write_data(core_data_out),
-        .read_data(core_data_in)
+        .read_data(core_data_in),
+        .address2((end_addr - pc_out_pa)/4),
+        .read_data2(rom_mmu_mem_value)
     );
     
     
