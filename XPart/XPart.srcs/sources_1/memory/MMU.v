@@ -31,14 +31,11 @@ always@(posedge clk or posedge rst) begin
     // -----------------------------------------
     // sv39 mode
     if(mode == 8) begin
-      if(page_level == 4) begin
+      if(page_level != 0 && mem_value == 0) begin
         page_level = 0;
       end
-      else if(page_level != 0 && mem_value == 0) begin
-        page_level = 4;
-      end
       else if(page_level != 0 && flags[3:1] != 0) begin  // rwx are not all zero, then this page is the last page
-        page_level = 4;
+        page_level = 0;
       end
       else begin // the page is not the last page
         page_level = page_level + 1;
@@ -63,16 +60,12 @@ always@(rst, clk, va, satp, page_level) begin
     // sv39 mode
     if(mode == 8) begin
       if(page_level == 0) begin
-        pa = (root_page_ppn << 12) + vpn2; 
-        stop = 0;
-      end
-      else if(page_level == 4) begin
+        pa = (root_page_ppn << 12) + vpn2 * 8; 
         stop = 1;
-        // pa = pa;
       end
       else if(page_level != 0 && mem_value == 0) begin
         pa = va;
-        stop = 1;
+        stop = 0;
       end
       else if(page_level != 0 && flags[3:1] != 0) begin  // rwx are not all zero, then this page is the last page
         pa = {{mem_value[53:10]}, {offset}};
@@ -80,8 +73,8 @@ always@(rst, clk, va, satp, page_level) begin
       end
       else begin // the page is not the last page
         case(page_level)
-          1: pa = ((mem_value[53:10]) << 12) + vpn1;
-          2: pa = ((mem_value[53:10]) << 12) + vpn0;
+          1: pa = ((mem_value[53:10]) << 12) + vpn1 * 8;
+          2: pa = ((mem_value[53:10]) << 12) + vpn0 * 8;
         endcase
         stop = 1;
       end
