@@ -63,7 +63,7 @@ always@(rst, clk, va, satp) begin
     // sv39 mode
     if(mode == 8) begin
       if(page_level == 0) begin
-        pa = va; 
+        pa = (root_page_ppn << 12) + vpn2; 
         stop = 0;
       end
       else if(page_level == 4) begin
@@ -80,7 +80,6 @@ always@(rst, clk, va, satp) begin
       end
       else begin // the page is not the last page
         case(page_level)
-          0: pa = (root_page_ppn << 12) + vpn2;
           1: pa = ((mem_value[53:10]) << 12) + vpn1;
           2: pa = ((mem_value[53:10]) << 12) + vpn0;
         endcase
