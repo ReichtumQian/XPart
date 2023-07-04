@@ -21,7 +21,7 @@ wire[8:0] vpn2 = va[38:30]; // virtual page number of level 2 page table
 
 wire[9:0] flags = mem_value[9:0]; // flags of page table entry
 
-reg[2:0] page_level;  // 4 means read, 5 means recover
+reg[2:0] page_level;  // 4 means read
 
 always@(posedge clk or posedge rst) begin
   if(rst) begin
@@ -68,6 +68,7 @@ always@(*) begin
       end
       else if(page_level == 4) begin
         stop = 1;
+        // pa = pa;
       end
       else if(page_level != 0 && mem_value == 0) begin
         pa = va;
