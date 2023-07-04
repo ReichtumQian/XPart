@@ -47,7 +47,7 @@ always@(posedge clk or posedge rst) begin
   end
 end
 
-always@(rst, clk, va, satp) begin
+always@(rst, clk, va, satp, page_level) begin
   if(rst) begin
     pa = 0;
     stop = 0;
