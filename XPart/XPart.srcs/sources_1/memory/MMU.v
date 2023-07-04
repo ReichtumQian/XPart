@@ -21,7 +21,7 @@ wire[8:0] vpn2 = va[38:30]; // virtual page number of level 2 page table
 
 wire[9:0] flags = mem_value[9:0]; // flags of page table entry
 
-reg[1:0] page_level;
+reg[2:0] page_level;  // 4 means read, 5 means recover
 
 always@(posedge clk or posedge rst) begin
   if(rst) begin
@@ -31,11 +31,14 @@ always@(posedge clk or posedge rst) begin
     // -----------------------------------------
     // sv39 mode
     if(mode == 8) begin
-      if(page_level != 0 && mem_value == 0) begin
+      if(page_level == 4) begin
         page_level = 0;
       end
+      else if(page_level != 0 && mem_value == 0) begin
+        page_level = 4;
+      end
       else if(page_level != 0 && flags[3:1] != 0) begin  // rwx are not all zero, then this page is the last page
-        page_level = 0;
+        page_level = 4;
       end
       else begin // the page is not the last page
         page_level = page_level + 1;
@@ -59,13 +62,20 @@ always@(*) begin
     // -----------------------------------------
     // sv39 mode
     if(mode == 8) begin
-      if(page_level != 0 && mem_value == 0) begin
-        pa = va;
+      if(page_level == 0) begin
+        pa = va; 
         stop = 0;
+      end
+      else if(page_level == 4) begin
+        stop = 1;
+      end
+      else if(page_level != 0 && mem_value == 0) begin
+        pa = va;
+        stop = 1;
       end
       else if(page_level != 0 && flags[3:1] != 0) begin  // rwx are not all zero, then this page is the last page
         pa = {{mem_value[53:10]}, {offset}};
-        stop = 0;
+        stop = 1;
       end
       else begin // the page is not the last page
         case(page_level)
