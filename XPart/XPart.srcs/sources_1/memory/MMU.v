@@ -47,17 +47,17 @@ always@(posedge clk or posedge rst) begin
   end
 end
 
-always@(*) begin
+always@(rst, clk, va, satp) begin
   if(rst) begin
     pa = 0;
-    stop <= 0;
+    stop = 0;
   end
   else begin
     // -----------------------------------------
     // satp == 0
     if(mode == 0) begin
-      pa <= va;
-      stop <= 0;
+      pa = va;
+      stop = 0;
     end
     // -----------------------------------------
     // sv39 mode
