@@ -53,7 +53,7 @@ module Core(
     wire stop = rom_mmu_stop | ram_mmu_stop;
     MMU rom_mmu(
       .rst(rst),
-      .clk(mem_clk),
+      .clk(cpu_clk),
       .va(pc_out),
       .satp(satp),
       .mem_value(rom_mmu_mem_value),
@@ -63,7 +63,7 @@ module Core(
 
     MMU ram_mmu(
       .rst(rst),
-      .clk(mem_clk),
+      .clk(cpu_clk),
       .va(addr_out),
       .satp(satp),
       .mem_value(core_data_in),
