@@ -37,6 +37,9 @@ always@(posedge clk or posedge rst) begin
       else if(page_level != 0 && flags[3:1] != 0) begin  // rwx are not all zero, then this page is the last page
         page_level = 0;
       end
+      else if(page_level == 3) begin
+        page_level = 0;
+      end 
       else begin // the page is not the last page
         page_level = page_level + 1;
       end
@@ -69,7 +72,7 @@ always@(rst, clk, va, satp, page_level) begin
       end
       else if(page_level != 0 && flags[3:1] != 0) begin  // rwx are not all zero, then this page is the last page
         pa = {{mem_value[53:10]}, {offset}};
-        stop = 1;
+        stop = 0;
       end
       else begin // the page is not the last page
         case(page_level)
