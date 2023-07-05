@@ -39,7 +39,7 @@ always@(posedge clk or posedge rst) begin
       if(mem_value_prev_neg != mem_value) begin // if write the memory
         page_level = 0;
       end
-      else if(page_level != 0 && mem_value[0] == 0) begin // the page table entry is not valid
+      else if(page_level == 1 && mem_value[0] == 0) begin // the page table entry is not valid
         page_level = 0;
       end
       else if(page_level != 0 && flags_prev_pos[3:1] != 0) begin  // rwx are not all zero, then this page is the last page
@@ -78,12 +78,17 @@ always@(rst, va, satp, page_level) begin
         pa = (root_page_ppn << 12) + vpn2 * 8; 
         stop = 1;
       end
-      else if(page_level != 0 && mem_value[0] == 0) begin  // the page table entry is not valid
+      else if(page_level == 1 && mem_value[0] == 0) begin  // the page table entry is not valid
         pa = va;
         stop = 0;
       end
-      else if(page_level != 0 && flags[3:1] != 0) begin  // rwx are not all zero, then this page is the last page
-        pa = {{mem_value[53:10]}, {offset}};
+      else if(page_level != 0 && flags_prev_pos[3:1] != 0) begin  // rwx are not all zero, then this page is the last page
+        case(page_level) 
+          1: pa = {{mem_value[53:28]}, {va[29:0]}};
+          2: pa = {{mem_value[53:19]}, {va[20:0]}};
+          3: pa = {{mem_value[53:10]}, {va[11:0]}};
+        endcase
+        
         stop = 0;
       end
       else begin // the page is not the last page
