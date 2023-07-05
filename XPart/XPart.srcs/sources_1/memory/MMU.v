@@ -19,11 +19,16 @@ wire[8:0] vpn0 = va[20:12]; // virtual page number of level 0 page table
 wire[8:0] vpn1 = va[29:21]; // virtual page number of level 1 page table
 wire[8:0] vpn2 = va[38:30]; // virtual page number of level 2 page table
 
-wire[9:0] flags = mem_value[9:0]; // flags of page table entry
+reg[2:0] page_level;  
+reg[63:0] mem_value_prev_pos;
+reg[63:0] mem_value_prev_neg;
 
-reg[2:0] page_level;  // 4 means read
+wire[9:0] flags = mem_value[9:0]; // flags of page table entry
+wire[9:0] flags_prev_pos = mem_value_prev_pos[9:0];
+
 
 always@(posedge clk or posedge rst) begin
+  mem_value_prev_pos = mem_value;
   if(rst) begin
     page_level = 0;
   end
@@ -31,10 +36,13 @@ always@(posedge clk or posedge rst) begin
     // -----------------------------------------
     // sv39 mode
     if(mode == 8) begin
-      if(page_level != 0 && mem_value[0] == 0) begin // the page table entry is not valid
+      if(mem_value_prev_neg != mem_value) begin // if write the memory
         page_level = 0;
       end
-      else if(page_level != 0 && flags[3:1] != 0) begin  // rwx are not all zero, then this page is the last page
+      else if(page_level != 0 && mem_value[0] == 0) begin // the page table entry is not valid
+        page_level = 0;
+      end
+      else if(page_level != 0 && flags_prev_pos[3:1] != 0) begin  // rwx are not all zero, then this page is the last page
         page_level = 0;
       end
       else if(page_level == 3) begin
@@ -45,6 +53,10 @@ always@(posedge clk or posedge rst) begin
       end
     end
   end
+end
+
+always@(negedge clk or negedge rst) begin
+  mem_value_prev_neg = mem_value;
 end
 
 always@(rst, va, satp, page_level) begin
