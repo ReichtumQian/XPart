@@ -102,7 +102,7 @@ module Core(
 
     myRam ram_unit(
         .clk(mem_clk),
-        .we(mem_write),
+        .we(mem_write && ~stop),
         .address((end_addr - addr_out_pa)/8),  // 注意地址是除以 4 的！！！！！！！！！！
         .write_data(core_data_out),
         .read_data(core_data_in),
