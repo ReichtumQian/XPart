@@ -20,15 +20,14 @@ wire[8:0] vpn1 = va[29:21]; // virtual page number of level 1 page table
 wire[8:0] vpn2 = va[38:30]; // virtual page number of level 2 page table
 
 reg[2:0] page_level;  
-reg[63:0] mem_value_prev_pos;
-reg[63:0] mem_value_prev_neg;
+reg[63:0] mem_value_prev;
 
 wire[9:0] flags = mem_value[9:0]; // flags of page table entry
-wire[9:0] flags_prev_pos = mem_value_prev_pos[9:0];
+wire[9:0] flags_prev = mem_value_prev[9:0];
 
 
 always@(posedge clk or posedge rst) begin
-  mem_value_prev_pos = mem_value;
+  mem_value_prev = mem_value;
   if(rst) begin
     page_level = 0;
   end
@@ -36,13 +35,10 @@ always@(posedge clk or posedge rst) begin
     // -----------------------------------------
     // sv39 mode
     if(mode == 8) begin
-      if(mem_value_prev_neg != mem_value) begin // if write the memory
+      if(page_level == 1 && mem_value_prev[0] == 0) begin // the page table entry is not valid
         page_level = 0;
       end
-      else if(page_level == 1 && mem_value[0] == 0) begin // the page table entry is not valid
-        page_level = 0;
-      end
-      else if(page_level != 0 && flags_prev_pos[3:1] != 0) begin  // rwx are not all zero, then this page is the last page
+      else if(page_level != 0 && flags_prev[3:1] != 0) begin  // rwx are not all zero, then this page is the last page
         page_level = 0;
       end
       else if(page_level == 3) begin
@@ -53,10 +49,6 @@ always@(posedge clk or posedge rst) begin
       end
     end
   end
-end
-
-always@(negedge clk or negedge rst) begin
-  mem_value_prev_neg = mem_value;
 end
 
 always@(rst, va, satp, page_level) begin
@@ -78,11 +70,11 @@ always@(rst, va, satp, page_level) begin
         pa = (root_page_ppn << 12) + vpn2 * 8; 
         stop = 1;
       end
-      else if(page_level == 1 && mem_value[0] == 0) begin  // the page table entry is not valid
+      else if(page_level == 1 && mem_value_prev[0] == 0) begin  // the page table entry is not valid
         pa = va;
         stop = 0;
       end
-      else if(page_level != 0 && flags_prev_pos[3:1] != 0) begin  // rwx are not all zero, then this page is the last page
+      else if(page_level != 0 && flags_prev[3:1] != 0) begin  // rwx are not all zero, then this page is the last page
         case(page_level) 
           1: pa = {{mem_value[53:28]}, {va[29:0]}};
           2: pa = {{mem_value[53:19]}, {va[20:0]}};
