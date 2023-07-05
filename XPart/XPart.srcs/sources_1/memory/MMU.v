@@ -31,7 +31,7 @@ always@(posedge clk or posedge rst) begin
     // -----------------------------------------
     // sv39 mode
     if(mode == 8) begin
-      if(page_level != 0 && mem_value == 0) begin
+      if(page_level != 0 && mem_value[0] == 0) begin // the page table entry is not valid
         page_level = 0;
       end
       else if(page_level != 0 && flags[3:1] != 0) begin  // rwx are not all zero, then this page is the last page
@@ -66,7 +66,7 @@ always@(rst, clk, va, satp, page_level) begin
         pa = (root_page_ppn << 12) + vpn2 * 8; 
         stop = 1;
       end
-      else if(page_level != 0 && mem_value == 0) begin
+      else if(page_level != 0 && mem_value[0] == 0) begin  // the page table entry is not valid
         pa = va;
         stop = 0;
       end
