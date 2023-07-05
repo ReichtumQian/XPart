@@ -822,9 +822,9 @@ module SCPU(
     // 100： csr
     // 101： pc + imm 
     wire[63:0] wb_memory_write_data; // 真正要写回寄存器的数据
-    wire wb_is_ld = wb_funct3 == 011;
-    wire wb_is_lw = wb_funct3 == 010;
-    wire wb_is_lbu = wb_funct3 == 100;
+    wire wb_is_ld = (wb_funct3 == 3);
+    wire wb_is_lw = (wb_funct3 == 2);
+    wire wb_is_lbu = (wb_funct3 == 4);
     assign wb_memory_write_data = (wb_is_ld) ? wb_memory_data : 
                                    (wb_is_lw) ? {{32'b0},{wb_memory_data[31:0]}} :
                                    (wb_is_lbu) ? {56'b0,wb_memory_data[7:0]} :

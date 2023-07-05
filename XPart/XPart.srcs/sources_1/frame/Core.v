@@ -103,10 +103,10 @@ module Core(
     myRam ram_unit(
         .clk(mem_clk),
         .we(mem_write),
-        .address((end_addr - addr_out_pa)/4),  // 注意地址是除以 4 的！！！！！！！！！！
+        .address((end_addr - addr_out_pa)/8),  // 注意地址是除以 4 的！！！！！！！！！！
         .write_data(core_data_out),
         .read_data(core_data_in),
-        .address2((end_addr - pc_out_pa)/4),
+        .address2((end_addr - pc_out_pa)/8),
         .read_data2(rom_mmu_mem_value)
     );
     
